@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+        }
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+        .container {
+            max-width: 500px;
+            margin: 100px auto;  /* Centering the container */
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out;
+        }
+        .container:hover {
+            transform: scale(1.02);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: bold;
+        }
+        .form-group label {
+            color: #333;
+            font-weight: bold;
+        }
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 1rem;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+            border-color: #007bff;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            width: 100%;
+            transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+        }
+        .forgot-password, .already-have-account {
+            margin-top: 15px;
+            text-align: center;
+            color: #333;
+        }
+        .forgot-password a, .already-have-account a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+        .forgot-password a:hover, .already-have-account a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .alert {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+        }
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group .btn {
+            position: absolute;
+            right: 10px; /* Adjust as needed */
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #007bff; /* Change this to match your theme */
+            cursor: pointer;
+            outline: none; /* Remove outline on focus */
+        }
+        .navbar {
+            background-color: #007bff; /* Set navbar background color to sky blue */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar-toggler {
+            border-color: white; /* Change border color to white */
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30' fill='white'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+        .sidebar {
+            position: fixed;
+            top: 60px; /* Adjust this value based on your navbar height */
+            left: -250px; /* Start hidden */
+            width: 250px;
+            height: calc(100% - 60px); /* Full height minus navbar height */
+            background-color: rgba(0, 0, 0, 0.9);
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+            padding: 20px 0;
+        }
+        .sidebar-nav li {
+            padding: 15px 20px;
+        }
+        .sidebar-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            color: #fff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+   <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <button class="close-btn" id="close-btn">&times;</button>
+            <ul class="sidebar-nav">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'register' %}">Signup</a></li>
+            </ul>
+        </div>
+
+        <!-- Navbar -->
+        <nav class="navbar">
+            <button class="navbar-toggler" id="hamburger-btn">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <span class="navbar-brand">Welcome</span>
+        </nav>
+
+    <div class="container">
+        <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required maxlength="12">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required maxlength="15">
+                    <div class="input-group-append">
+                        <button class="btn" type="button" id="toggle-password">
+                            <i class="fas fa-eye" id="eye-icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-custom"><i class="fas fa-sign-in-alt"></i> Login</button>
+            {% for message in messages %}
+                <div class="alert alert-danger mt-3">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </form>
+        <div class="forgot-password">
+            <p><a href="{% url 'password_reset' %}"><i class="fas fa-unlock-alt"></i> Forgot Password?</a></p>
+        </div>
+        <div class="already-have-account">
+            <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const closeBtn = document.getElementById('close-btn');
+    
+        hamburgerBtn.addEventListener('click', () => {
+            sidebar.style.left = '0'; // Show sidebar
+        });
+    
+        closeBtn.addEventListener('click', () => {
+            sidebar.style.left = '-250px'; // Hide sidebar
+        });
+
+        document.getElementById('toggle-password').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+     </script>
+</body>
+</html>

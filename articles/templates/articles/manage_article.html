@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Articles</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .table-container {
+            margin-top: 30px;
+        }
+        .section-title {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Manage Articles</h2>
+
+        <!-- All Articles -->
+        <div class="table-container">
+            <h3 class="section-title">All Articles</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in all_articles %}
+                    <tr>
+                        <td>{{ article.title }}</td>
+                        <td>{{ article.category }}</td>
+                        <td>{{ article.author }}</td>
+                        <td>{{ article.status }}</td>
+                        <td>
+                            <a href="{% url 'delete_article' article.id %}" class="btn btn-danger"
+                               onclick="return confirm('Are you sure you want to delete this article?');">
+                               Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No articles available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Published Articles -->
+        <div class="table-container">
+            <h3 class="section-title">Published Articles</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Author</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in published_articles %}
+                    <tr>
+                        <td>{{ article.title }}</td>
+                        <td>{{ article.category }}</td>
+                        <td>{{ article.author }}</td>
+                        <td>
+                            <a href="{% url 'delete_article' article.id %}" class="btn btn-danger"
+                               onclick="return confirm('Are you sure you want to delete this article?');">
+                               Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No published articles available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Rejected Articles -->
+        <div class="table-container">
+            <h3 class="section-title">Rejected Articles</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Author</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in rejected_articles %}
+                    <tr>
+                        <td>{{ article.title }}</td>
+                        <td>{{ article.category }}</td>
+                        <td>{{ article.author }}</td>
+                        <td>
+                            <a href="{% url 'delete_article' article.id %}" class="btn btn-danger"
+                               onclick="return confirm('Are you sure you want to delete this article?');">
+                               Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No rejected articles available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-secondary" onclick="window.history.back();">Back</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        #sidebar {
+            height: calc(100% - 60px);
+            width: 250px;
+            position: fixed;
+            z-index: 1;
+            top: 60px;
+            left: -250px; /* Hidden off-screen */
+            background-color: #343a40;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 20px;
+        }
+        #sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            display: block;
+            transition: 0.3s;
+        }
+        #sidebar a:hover {
+            background-color: #575d63;
+        }
+        #main {
+            transition: margin-left 0.3s;
+            padding: 16px;
+            margin-left: 0; /* Adjust for initial state */
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .hamburger {
+            font-size: 30px;
+            cursor: pointer;
+            color: #fff;
+        }
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .card {
+            width: 22rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .card-icon {
+            font-size: 50px;
+            color: #007bff;
+        }
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .view-btn {
+            margin-top: 15px;
+        }
+        .welcome-message {
+            text-align: center; /* Center the welcome message */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <span class="hamburger" onclick="toggleNav()">&#9776;</span>
+        <span class="navbar-brand ml-auto">Admin Dashboard</span>
+    </nav>
+
+    <div id="sidebar" onmouseenter="openNav()" onmouseleave="closeNav()">
+        <a href="#" onclick="updateTitle('Dashboard')">Dashboard</a>
+        <a href="{% url 'edit_profile' %}" onclick="updateTitle('Edit Profile')">Edit Profile</a>
+        <a href="{% url 'logout' %}" onclick="updateTitle('Logout')">Logout</a>
+    </div>
+
+    <div id="main">
+        <div class="container">
+            <h2 class="welcome-message">Welcome, {{ user.username }}</h2>
+            <div class="card-container row">
+                <!-- Card for Manage Users -->
+                <div class="col-md-6">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-users card-icon"></i>
+                            <h5 class="card-title">Manage Users</h5>
+                            <p>Manage your users</p>
+                            <a href="{% url 'manage_users' %}" class="btn btn-warning view-btn">Manage</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card for Manage Articles -->
+                <div class="col-md-6">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-edit card-icon"></i>
+                            <h5 class="card-title">Manage Articles</h5>
+                            <p>Manage all articles</p>
+                            <a href="{% url 'manage_articles' %}" class="btn btn-info view-btn">Manage</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("sidebar").style.left = "0"; // Open sidebar
+            document.getElementById("main").style.marginLeft = "250px"; // Shift main content
+        }
+
+        function closeNav() {
+            document.getElementById("sidebar").style.left = "-250px"; // Close sidebar
+            document.getElementById("main").style.marginLeft = "0"; // Reset main content
+        }
+
+        function toggleNav() {
+            if (document.getElementById("sidebar").style.left === "0px") {
+                closeNav();
+            } else {
+                openNav();
+            }
+        }
+
+        function updateTitle(title) {
+            document.getElementById("page-title").innerText = title;
+            closeNav();
+        }
+    </script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

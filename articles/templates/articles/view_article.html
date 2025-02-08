@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Article</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 30px;
+        }
+        .article-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .article-content {
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .btn-group {
+            margin-top: 20px;
+        }
+        .btn-edit {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-edit:hover {
+            background-color: #0056b3;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <span class="navbar-brand ml-3">Article Management</span>
+        <a href="javascript:history.back();" class="btn btn-light ml-auto">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </nav>
+
+    <div class="container">
+        <div class="article-card">
+            <h1>{{ article.title }}</h1>
+            <p><strong>Subtitle:</strong> {{ article.subtitle }}</p>
+            <p><strong>Author:</strong> {{ article.author_name }}</p>
+            <p><strong>Category:</strong> {{ article.category }}</p>
+            <p><strong>Tags:</strong> {{ article.tags }}</p>
+            <p><strong>Published Date:</strong> {{ article.publish_date }}</p>
+            <div class="article-image mb-3">
+                {% if article.image %}
+                    <img src="{{ article.image.url }}" alt="{{ article.title }}" class="img-fluid">
+                {% else %}
+                    <p>No image available.</p>
+                {% endif %}
+            </div>
+            <div class="article-content">
+                <h2>Article Content</h2>
+                <p>{{ article.content }}</p>
+            </div>
+            <div class="btn-group">
+               <a href="{% url 'edit_article' article.id %}" class="btn btn-edit btn-sm">Edit Article</a>
+                <form action="{% url 'delete_article' article.id %}" method="POST" style="display:inline;"> 
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-delete btn-sm">Delete Article</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

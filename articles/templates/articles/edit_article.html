@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Article</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Edit Article</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="from" value="{{ request.GET.from }}">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ form.title.value }}" required>
+            </div>
+            <div class="form-group">
+                <label for="subtitle">Subtitle</label>
+                <input type="text" class="form-control" id="subtitle" name="subtitle" value="{{ form.subtitle.value }}">
+            </div>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea class="form-control" id="content" name="content" rows="5" required>{{ form.content.value }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Article Image</label>
+                <input type="file" class="form-control-file" id="image" name="image">
+            </div>
+            <div class="form-group">
+                <label for="tags">Tags</label>
+                <div>
+                    {% for tag in form.tags.field.choices %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="tags" value="{{ tag.0 }}" 
+                                   {% if tag.0 in form.tags.value %}checked{% endif %}>
+                            <label class="form-check-label">{{ tag.1 }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select class="form-control" id="category" name="category" required>
+                    {% for category in form.category.field.choices %}
+                        <option value="{{ category.0 }}" {% if category.0 == form.category.value %}selected{% endif %}>{{ category.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="publish_date">Publish Date</label>
+                <input type="date" class="form-control" id="publish_date" name="publish_date" 
+                       value="{{ form.publish_date.value|date:'Y-m-d' }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Article</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Set today's date as the minimum value for the publish_date input
+        document.addEventListener("DOMContentLoaded", function() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("publish_date").setAttribute("min", today);
+        });
+    </script>
+</body>
+</html>

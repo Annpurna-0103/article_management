@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    {% load static %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            {% comment %} background-image: url("{% static 'images/register.avif' %}"); {% endcomment %}
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            transition: background 0.5s ease-in-out;
+            
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: bold;
+        }
+        .form-group label {
+            color: #333;
+            font-weight: bold;
+        }
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 1rem;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+            border-color: #007bff;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            width: 100%;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .alert {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .progress {
+            height: 5px;  /* Height of the progress bar */
+            width: 50%;   /* Adjust the width here */
+            max-width: 300px; /* Optional: Max width */
+            margin: auto;  /* Center the progress bar */
+        }
+        {% comment %} .progress-bar {
+            transition: width 0.4s ease-in-out;
+        } {% endcomment %}
+        
+        .progress-bar-red {
+            background-color: #dc3545; /* Red color */
+        }
+        
+        .progress-bar-yellow {
+            background-color: #ffc107; /* Yellow color */
+        }
+        
+        .progress-bar-green {
+            background-color: #28a745; /* Green color */
+        }
+        .validation-feedback {
+            margin-top: -10px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        .validation-feedback span {
+            display: none;
+            margin-top: 5px;
+        }
+        .validation-feedback .valid-feedback {
+            color: #28a745;
+        }
+        .validation-feedback .invalid-feedback {
+            color: #dc3545;
+        }
+        .progress-bar-red {
+            background-color: #dc3545;
+        }
+        .progress-bar-yellow {
+            background-color: #ffc107;
+        }
+        .progress-bar-green {
+            background-color: #28a745;
+        }
+        /* Navbar Styles */
+        .navbar {
+            background-color: #333;
+        }
+        .navbar a {
+            color: #fff;
+            font-weight: bold;
+            padding: 15px;
+        }
+        .navbar a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .already-have-account p {
+            color: black
+        }
+        #email-special-start, #email-special-before {
+            display: none;
+        }
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group .btn {
+            position: absolute;
+            right: 10px; /* Adjust as needed */
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #007bff; /* Change this to match your theme */
+            cursor: pointer;
+            outline: none; /* Remove outline on focus */
+        }
+        .navbar {
+            background-color: #007bff;
+            color: white;
+        }
+        .navbar-toggler {
+            border: none;
+        }
+        .navbar-toggler-icon {
+            background-color: white; /* Change icon color to white */
+        }
+        .sidebar {
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hidden by default */
+            width: 250px;
+            height: 100%;
+            transition: left 0.3s;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .sidebar a {
+            padding: 15px;
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #f1f1f1;
+        }
+        .open-sidebar {
+            left: 0; /* Show the sidebar */
+        }
+        .content {
+            margin-left: 0;
+            transition: margin-left 0.3s;
+        }
+        .open-btn {
+            font-size: 24px; /* Hamburger icon size */
+            cursor: pointer;
+            color: #333;
+            position: absolute; /* Position the button */
+            top: 15px; /* Adjust the position */
+            left: 15px; /* Adjust the position */
+        }
+        .shift-content {
+            margin-left: 250px; /* Space for the sidebar */
+        }
+    </style>
+</head>
+<body>
+
+   
+    <nav class="navbar navbar-expand-lg">
+        <button class="navbar-toggler" type="button" onclick="toggleSidebar()">
+            <span class="navbar-toggler-icon">
+                <i class="fa fa-bars"></i> <!-- Adding Font Awesome Icon for Hamburger -->
+            </span>
+        </button>
+        <span class="navbar-brand">Article Management System</span>
+    </nav>
+    
+    <div class="sidebar" id="sidebar">
+        <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+        <a href="{% url 'login' %}"><i class="fa fa-sign-in-alt"></i> Login</a>
+    </div>
+<div id="content" class="content">
+    <div class="container">
+        <h2><i class="fas fa-user-plus"></i> Register</h2>
+        <form method="post" id="register-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> Username</label>
+                <input type="text" class="form-control" id="username" name="username" maxlength="12" required>
+                <div class="progress mt-2">
+                    <div id="username-progress" class="progress-bar progress-bar-danger" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div id="username-error" class="validation-feedback invalid-feedback" style="display: none;"></div>
+            </div>
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email address</label>
+                <input type="email" class="form-control" id="email" maxlength="30" name="email" required>
+                <div id="email-error" class="validation-feedback invalid-feedback" style="display:none;"></div>
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password1" required maxlength="15">
+                <div class="input-group-append">
+                    <button class="btn" type="button" id="toggle-password-register">
+                        <i class="fas fa-eye" id="eye-icon-register"></i>
+                    </button>
+                </div>
+            </div>
+                <div class="progress mt-2">
+                    <div id="password-strength" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div id="password-error" class="validation-feedback invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password"><i class="fas fa-lock"></i> Confirm Password</label>
+                <input type="password" class="form-control" id="confirm_password" name="password2" required>
+                <div id="confirm-password-error" class="validation-feedback invalid-feedback"></div>
+            </div>
+           
+           
+            <div class="form-group">
+                <label for="role"><i class="fas fa-user-tag"></i> Select Your Role</label>
+                <select class="form-control" id="role" name="role" required>
+                    <option value="journalist">Journalist</option>
+                    <option value="editor">Editor</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-custom"><i class="fas fa-user-plus"></i> Register</button>
+            {% if form.errors %}
+                <div class="alert alert-danger mt-3">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+        </form>
+
+        <div class="already-have-account">
+            <p class="text-center">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+        </div>
+    </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            var content = document.getElementById("content");
+            sidebar.classList.toggle("open-sidebar");
+            content.classList.toggle("shift-content");
+        }
+
+        document.getElementById('toggle-password-register').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon-register');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+
+        function updateUsernameProgress() {
+            const username = $('#username').val();
+            let progress = 0;
+        
+            // Check for minimum and maximum length
+            console.log(`Username length: ${username.length}`);
+            if (username.length >= 3 && username.length <= 12) progress += 25;
+        
+            // Check that it starts with an alphabet
+            if (/^[a-zA-Z]/.test(username)) progress += 25;
+        
+            // Check for valid characters
+            if (/^[a-zA-Z0-9_]+$/.test(username)) progress += 25;
+        
+            // Check for at least 3 letters
+            const letterCount = (username.match(/[a-zA-Z]/g) || []).length;
+            console.log(`Letter count: ${letterCount}`);
+            if (letterCount >= 3) progress += 25;
+        
+            // Check for consecutive characters
+            if (!/(.)\1{3,}/.test(username)) {
+                progress += 0; // No additional points for this
+            } else {
+                progress = Math.max(progress - 25, 0); // Deduct points
+            }
+        
+            // Check for spaces
+            if (!/\s/.test(username)) {
+                progress += 0; // No additional points for this
+            } else {
+                progress = Math.max(progress - 25, 0); // Deduct points
+            }
+        
+    
+            // Check for repeated characters (no character should repeat three or more times)
+            const charCount = {};
+            for (let char of username) {
+                charCount[char] = (charCount[char] || 0) + 1;
+                if (charCount[char] >= 3) {
+                    progress = Math.max(progress - 25, 0); // Deduct points if any character repeats 3 or more times
+                    $('#username-error').text('No character should repeat three or more times.').show();
+                    break;
+                }
+            }
+    
+            // Update progress bar
+                $('#username-progress').css('width', `${progress}%`);
+                $('#username-progress').removeClass('bg-danger').removeClass('bg-warning'); // Remove any previous classes
+
+                if (progress === 100) {
+                    $('#username-progress').addClass('bg-success'); // Green when complete
+                } else {
+                    $('#username-progress').addClass('bg-danger'); // Red for incomplete
+                }
+            
+            // Manage error messages
+            $('#username-error').hide(); // Hide all errors initially
+            if (username.length < 3 || username.length > 12) {
+                $('#username-error').text('Username must be between 3 and 12 characters long.').show();
+            } else if (!/^[a-zA-Z]/.test(username) ) {
+                $('#username-error').text('Username must start with an alphabet.').show();
+            } else if (!/^[a-zA-Z0-9_]+$/.test(username) ) {
+                $('#username-error').text('Only letters, digits, and underscores are allowed.').show();
+            } else if (letterCount < 3) {
+                $('#username-error').text('Username must contain at least 3 letters.').show();
+            } else if (/(.)\1{3,}/.test(username) ) {
+                $('#username-error').text('No consecutive characters allowed.').show();
+            } else if (/\s/.test(username) ) {
+                $('#username-error').text('No spaces allowed.').show();
+            } else {
+                // Hide error if all checks pass
+                $('#username-error').hide();
+            }
+        }
+        
+        $(document).ready(function () {
+            $('#username').on('input', updateUsernameProgress);
+        });
+
+        const validTLDs = ['com', 'org', 'net', 'io', 'co', 'info']; // Add valid TLDs as needed
+
+        function updateEmailValidation() {
+            const email = $('#email').val();
+            let isValid = true;
+    
+            // Clear previous error messages
+            $('#email-error').hide();
+    
+            // Check that the email starts with an alphabet
+            if (!/^[a-zA-Z]/.test(email)) {
+                isValid = false;
+                $('#email-error').text('Email must start with an alphabet.').show();
+            }
+    
+            // Check for basic format
+            const emailPattern = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailPattern.test(email)) {
+                isValid = false;
+                $('#email-error').text('Invalid email format.').show();
+            }
+    
+            // Check for username length (before the @)
+            const usernamePart = email.split('@')[0];
+            if (usernamePart.length > 15) {
+                isValid = false;
+                $('#email-error').text('Username part must not exceed 15 characters.').show();
+            }
+    
+            // Check for domain length (after the @)
+            const domainPart = email.split('@')[1];
+            if (domainPart) {
+                const domainName = domainPart.split('.')[0];
+                if (domainName.length > 15) {
+                    isValid = false;
+                    $('#email-error').text('Domain part must not exceed 15 characters.').show();
+                }
+            }
+    
+            // Check overall length
+            if (email.length > 30) {
+                isValid = false;
+                $('#email-error').text('Email must be no longer than 30 characters.').show();
+            }
+    
+            // Check for consecutive identical characters
+            if (/(.)\1{2,}/.test(email)) {
+                isValid = false;
+                $('#email-error').text('No three consecutive identical characters allowed.').show();
+            }
+    
+            // Check for valid TLD
+            const tld = email.split('.').pop();
+            if (!validTLDs.includes(tld)) {
+                isValid = false;
+                $('#email-error').text('Invalid top-level domain.').show();
+            }
+    
+            // Set the final validation state
+            if (isValid) {
+                $('#email-error').text('Email is valid!').css('color', 'green').show();
+            }
+        }
+    
+        $(document).ready(function () {
+            $('#email').on('input', updateEmailValidation);
+        });
+
+        function updatePasswordProgress() {
+            const password = $('#password').val();
+            let progress = 0;
+        
+            // Check for length between 8 and 15
+            if (password.length >= 8 && password.length <= 15) progress += 25;
+        
+            // Check for uppercase, lowercase, number, and special character
+            if (/[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password) && /[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                progress += 25;
+            }
+        
+            // Check for consecutive identical characters
+            if (!/(.)\1{2,}/.test(password)) {
+                progress += 25;
+            }
+        
+            // Check for not only letters or numbers
+            if (!/^[a-zA-Z]+$/.test(password) && !/^[0-9]+$/.test(password)) {
+                progress += 25;
+            }
+        
+            // Update progress bar
+            $('#password-strength').css('width', `${progress}%`);
+            $('#password-strength').toggleClass('bg-danger', progress < 100);
+            $('#password-strength').toggleClass('bg-success', progress === 100);
+        
+            // Manage error messages
+            $('#password-error').hide(); // Hide all errors initially
+        
+            if (password.length < 8 || password.length > 15) {
+                $('#password-error').text('Password must be between 8 and 15 characters long.').show();
+            } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/\d/.test(password) || !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                $('#password-error').text('Password must include an uppercase letter, a lowercase letter, a number, and a special character.').show();
+            } else if (/(.)\1{2,}/.test(password)) {
+                $('#password-error').text('No more than two consecutive identical characters allowed.').show();
+            } else if (/^[a-zA-Z]+$/.test(password) || /^[0-9]+$/.test(password)) {
+                $('#password-error').text('Password cannot consist only of letters or numbers.').show();
+            }
+        }
+        
+        $(document).ready(function () {
+            $('#password').on('input', updatePasswordProgress);
+            // ... (rest of your existing code for username and email validations)
+        });
+
+        function validateConfirmPassword() {
+            const password = $('#password').val();
+            const confirmPassword = $('#confirm_password').val();
+        
+            // Manage error messages
+            $('#confirm-password-error').hide(); // Hide all errors initially
+        
+            if (confirmPassword !== password) {
+                $('#confirm-password-error').text('Passwords do not match.').show();
+            }
+        }
+        
+        $(document).ready(function () {
+            $('#confirm_password').on('input', validateConfirmPassword);
+            // ... (rest of your existing code for username, email, and password validations)
+        });
+    </script>
+    
+</body>
+</html>

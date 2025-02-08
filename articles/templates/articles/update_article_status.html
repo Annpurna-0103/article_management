@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Article Status</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+        .btn:disabled {
+            opacity: 0.65;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Update Article Status</h2>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Category: {{ article.category }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Publish Date: {{ article.publish_date }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Author: {{ article.author }}</h6>
+                <p class="card-text">{{ article.content }}</p>
+                <h6 class="card-subtitle mb-2 text-muted">Tags: {{ article.tags.all|join:", " }}</h6>
+
+                <!-- Status update buttons -->
+                <form method="post" action="{% url 'update_article_status' article.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="Approved">
+                    <button type="submit" class="btn btn-success" 
+                            {% if article.status == 'Approved' or article.status == 'Rejected' %}disabled{% endif %}>
+                        Publish
+                    </button>
+                </form>
+
+                <form method="post" action="{% url 'update_article_status' article.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="Rejected">
+                    <button type="submit" class="btn btn-danger" 
+                            {% if article.status == 'Rejected' or article.status == 'Approved' %}disabled{% endif %}>
+                        Reject
+                    </button>
+                </form>
+
+                {% if article.status == 'Approved' %}
+                    <p class="text-success mt-3">This article has been published.</p>
+                {% elif article.status == 'Rejected' %}
+                    <p class="text-danger mt-3">This article has been rejected.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

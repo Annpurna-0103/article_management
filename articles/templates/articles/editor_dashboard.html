@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Dashboard</title>
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        #sidebar {
+            height: calc(100% - 60px);
+            width: 250px;
+            position: fixed;
+            z-index: 1;
+            top: 60px;
+            left: -250px; /* Hidden off-screen */
+            background-color: #343a40;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 20px;
+        }
+        #sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            display: block;
+            transition: 0.3s;
+        }
+        #sidebar a:hover {
+            background-color: #575d63;
+        }
+        #main {
+            transition: margin-left 0.3s;
+            padding: 16px;
+            margin-left: 0; /* Adjust for initial state */
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .hamburger {
+            font-size: 30px;
+            cursor: pointer;
+            color: #fff;
+        }
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .card {
+            width: 22rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .card-icon {
+            font-size: 50px;
+            color: #007bff;
+        }
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .view-btn {
+            margin-top: 15px;
+        }
+        .welcome-message {
+            text-align: center; /* Center the welcome message */
+            margin-top: 20px;
+        }
+        .profile {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-photo {
+            width: 80px; /* Adjust size as needed */
+            height: 80px; /* Maintain aspect ratio */
+            border-radius: 50%; /* Make it circular */
+            object-fit: cover; /* Crop to fit */
+        }
+        
+        .profile-name {
+            color: #fff; /* Change as needed */
+            font-size: 18px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <span class="hamburger" onclick="toggleNav()">&#9776;</span>
+        <span class="text-white ml-auto">Editor Dashboard</span>
+    </nav>
+
+    <div id="sidebar" onmouseenter="openNav()" onmouseleave="closeNav()">
+        <div class="profile">
+            <img src="{% static 'profile.png' %}" alt="Profile Photo" class="profile-photo">
+            <p class="profile-name">{{ user.username }}</p>
+        </div>
+        <a href="#" onclick="updateTitle('Dashboard')">Dashboard</a>
+        <a href="{% url 'edit_profile' %}" onclick="updateTitle('Edit Profile')">Edit Profile</a>
+        <a href="{% url 'logout' %}" onclick="updateTitle('Logout')">Logout</a>
+    </div>
+
+    <div id="main">
+        <div class="container">
+            <h2 class="welcome-message">Welcome, {{ user.username }}</h2>
+
+            <div class="card-container">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-file-alt card-icon"></i>
+                        <h5 class="card-title">Review Articles</h5>
+                        <p>{{ my_articles_count }} articles</p>
+                        <a href="{% url 'review_article' %}" class="btn btn-info view-btn">View</a>
+                    </div>
+                </div>
+
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-check-circle card-icon"></i>
+                        <h5 class="card-title">Published Articles</h5>
+                        <p>{{ published_articles_count }} articles</p>
+                        <a href="{% url 'published_article' %}" class="btn btn-success view-btn">View</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-container">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-times-circle card-icon"></i>
+                        <h5 class="card-title">Rejected Articles</h5>
+                        <p>{{ rejected_articles_count }} articles</p>
+                        <a href="{% url 'rejected_articles' %}" class="btn btn-danger view-btn">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function openNav() {
+            document.getElementById("sidebar").style.left = "0"; // Open sidebar
+            document.getElementById("main").style.marginLeft = "250px"; // Shift main content
+        }
+
+        function closeNav() {
+            document.getElementById("sidebar").style.left = "-250px"; // Close sidebar
+            document.getElementById("main").style.marginLeft = "0"; // Reset main content
+        }
+
+        function toggleNav() {
+            if (document.getElementById("sidebar").style.left === "0px") {
+                closeNav();
+            } else {
+                openNav();
+            }
+        }
+
+        function updateTitle(title) {
+            document.getElementById("page-title").innerText = title;
+            closeNav();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Management System</title>
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: url({% static 'images/content.jpeg' %});
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth; 
+    }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #f8f9fa !important;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        #main {
+            transition: margin-left .5s;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 120px 0;
+            text-align: center;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .hero-section h1 {
+            font-size: 4.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s;
+        }
+
+        .hero-section p {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            animation: fadeInUp 1.5s;
+        }
+
+        .btn-custom {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 30px;
+            font-size: 1.25rem;
+            border-radius: 50px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        /* Info Section */
+        .info-section {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 60px 0;
+            color: #333;
+            text-align: center;
+        }
+
+        .info-section h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .info-section p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .info-section .icon-box {
+            display: inline-block;
+            width: 200px;
+            text-align: center;
+            margin: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .info-section .icon-box:hover {
+            transform: translateY(-10px);
+        }
+
+        .info-section .icon-box i {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        /* About Us Section */
+        .about-us-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .about-us-section h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .about-us-section p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Articles Section */
+        .articles-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 60px 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .articles-section h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .articles-section p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .articles-table {
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .articles-table table {
+            background-color: rgba(0, 0, 0, 0.7); /* Improved visibility */
+            color: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .articles-table th, .articles-table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .articles-table th {
+            background-color: #333;
+        }
+
+        .articles-table td img {
+            width: 100px;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        /* Contact Us Section */
+        .contact-us-section {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .contact-us-section h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .contact-us-section p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#about-us">About Us</a>
+        <a href="#articles">Articles</a>
+        <a href="#why-choose-us">Why Choose Us?</a>
+        <a href="#contact-us">Contact Us</a>
+    </div>
+
+    <div id="main">
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <span class="navbar-toggler-icon" onclick="openNav()" style="cursor: pointer;"></span>
+            <a class="navbar-brand" href="#">Article Management</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+       <!-- Hero Section -->
+       <div class="hero-section">
+        <h1>Welcome to the Article Management System</h1>
+        <p>Your central hub for creating, reviewing, and managing articles with ease.</p>
+        <a href="#contact-us" class="btn btn-custom">Contact Us</a>
+    </div>
+
+        <!-- About Us Section -->
+        <div id="about-us" class="about-us-section">
+            <h2>About Us</h2>
+            <p><strong>Journalists:</strong> Our team of skilled journalists is dedicated to producing engaging and high-quality content, ensuring that every article is thoroughly researched and well-written.</p>
+            <p><strong>Editors:</strong> Our editors meticulously review every piece of content to ensure accuracy, clarity, and adherence to our quality standards.</p>
+            <p><strong>Admins:</strong> The admin team oversees the entire system, ensuring smooth operations and providing support to journalists and editors as needed.</p>
+        </div>
+
+       
+       <!-- Why Choose Us Section -->
+       <div id="about-us" class="info-section">
+        <h2>Why Choose Us?</h2>
+        <p>Our system helps you manage articles with efficiency, offering seamless workflows for journalists, editors, and admins.</p>
+        <div class="d-flex justify-content-center">
+            <div class="icon-box">
+                <i class="fas fa-newspaper"></i>
+                <p>Effortless Article Submission</p>
+            </div>
+            <div class="icon-box">
+                <i class="fas fa-edit"></i>
+                <p>Powerful Review Tools</p>
+            </div>
+            <div class="icon-box">
+                <i class="fas fa-user-shield"></i>
+                <p>Admin Control & Security</p>
+            </div>
+        </div>
+    </div>
+        
+   
+
+    <!-- Articles Section -->
+    <div id="articles" class="articles-section">
+        <h2>Published Articles</h2>
+        <p>Explore the latest articles from our authors.</p>
+        <div class="articles-table">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Subtitle</th>
+                        <th>Content</th>
+                        <th>Email</th>
+                        <th>Image</th>
+                        <th>Tags</th>
+                        <th>Category</th>
+                        <th>Publish Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in published_articles %}
+                    <tr>
+                        <td>{{ article.title }}</td>
+                        <td>{{ article.subtitle }}</td>
+                        <td>{{ article.content|truncatewords:10 }}</td>
+                        <td>{{ article.email }}</td>
+                    
+                        <td>{{ article.tags.all|join:", " }}</td>
+                        <td>{{ article.category }}</td>
+                        <td>{{ article.publish_date }}</td>
+                        <td>{{ article.status }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center">No published articles available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </table>
+        </div>
+    </div>
+
+        <!-- Contact Us Section -->
+        <div id="contact-us" class="contact-us-section">
+            <h2>Contact Us</h2>
+            <p>If you have any questions or need further assistance, feel free to reach out to us.</p>
+            <p>Email: annutripathi0112@gmail.com.com</p>
+            <p>Phone: +91 8318305290</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2024 Article Management System. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</body>
+</html>
